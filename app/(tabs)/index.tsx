@@ -1,15 +1,37 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, ScrollView, Dimensions, RefreshControl } from "react-native";
 import Avatar from "../components/avatar.component";
 import Colors from "../constants/colors.constant";
 import { RFValue } from "react-native-responsive-fontsize";
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { router } from "expo-router";
+import { useState } from "react";
+import data from '../../fakedata.json';
+import formatCurrency from "../utils/format.currency";
 
+const { width } = Dimensions.get('window');
 
 export default function Home() {
+    let [refreshing, setRefreshing] = useState(false);
+    let [dados, setDados] = useState(data);
+
+
+    const onRefresh = () => {
+        setRefreshing(true);
+        setTimeout(() => {
+            setRefreshing(false);
+        }, 2000);
+    }
+
+
 
     return (
-        <View style={styles.container}>
+        <ScrollView style={styles.container}
+            refreshControl={
+                <RefreshControl
+                    refreshing={refreshing}
+                    onRefresh={onRefresh}
+                />
+            }
+        >
             <View style={styles.header}>
                 <View style={styles.headerConteudo}>
                     <Text style={styles.inicioText}>Inicio</Text>
@@ -20,8 +42,9 @@ export default function Home() {
                         <Text style={styles.total}>Total</Text>
                     </View>
                     <View style={styles.totalContainer}>
-                        <Text style={styles.valor}>R$ 500,00</Text>
-                        <Ionicons name="refresh" size={20} color={Colors.offWhite} style={styles.refreshIcon} />
+                        <Text style={styles.valor}>
+                            {formatCurrency(dados.home[0].total)}
+                        </Text>
                     </View>
                 </View>
                 <View style={styles.cardContainer}>
@@ -29,14 +52,18 @@ export default function Home() {
                         <Ionicons name="caret-up-outline" size={24} color={Colors.offWhite} />
                         <View>
                             <Text style={styles.cardText}>Entradas</Text>
-                            <Text style={styles.cardValue}>R$ 250,00</Text>
+                            <Text style={styles.cardValue}>
+                                {formatCurrency(dados.entrada[0].total)}
+                            </Text>
                         </View>
                     </View>
                     <View style={styles.card}>
                         <Ionicons name="caret-down-outline" size={24} color={Colors.offWhite} />
                         <View>
                             <Text style={styles.cardText}>Despesas</Text>
-                            <Text style={styles.cardValue}>R$ 250,00</Text>
+                            <Text style={styles.cardValue}>
+                                {formatCurrency(dados.saida[0].total)}
+                            </Text>
                         </View>
                     </View>
                 </View>
@@ -45,9 +72,7 @@ export default function Home() {
                         Última atualização às
                     </Text>
                     <Text style={styles.atualizacaoText}>
-                        {
-                            new Date().getHours() + ':' + new Date().getMinutes()
-                        }
+                        {new Date().toLocaleTimeString()}
                     </Text>
                 </View>
             </View>
@@ -57,7 +82,7 @@ export default function Home() {
                     <Text>Úlitmos 7 dias</Text>
                 </View>
             </View>
-        </View>
+        </ScrollView>
     );
 }
 
@@ -116,7 +141,7 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.secondary,
         padding: 10,
         borderRadius: 10,
-        width: 150,
+        width: width * 0.4,
         justifyContent: 'space-around',
     },
     cardText: {
@@ -149,4 +174,4 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         padding: 10,
     },
-}); 
+});
