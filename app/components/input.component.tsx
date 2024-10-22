@@ -7,12 +7,13 @@ import { Ionicons } from "@expo/vector-icons"; // Importando ícones do Ionicons
 interface InputProps {
     placeholder: string;
     isPassword?: boolean;
-    name: string;
+    name?: string;
     onChange: (value: string) => void;
     value: string;
+    isSerch?: boolean;
 }
 
-export default function Input({ placeholder, name, isPassword, onChange, value }: InputProps) {
+export default function Input({ placeholder, name, isPassword, onChange, value, isSerch }: InputProps) {
     const [isFocused, setIsFocused] = useState(false);
     const [showPassword, setShowPassword] = useState(false); // Estado para controlar a visualização da senha
 
@@ -45,6 +46,18 @@ export default function Input({ placeholder, name, isPassword, onChange, value }
                         />
                     </TouchableOpacity>
                 )}
+                {isSerch && (
+                    <TouchableOpacity
+                        style={styles.searchIcon}
+                    >
+                        <Ionicons
+                            name={"search-outline"}
+                            size={24}
+                            color={Colors.blackInput}
+                            style={{ marginRight: 10 }}
+                        />
+                    </TouchableOpacity>
+                )}
             </View>
         </View>
     );
@@ -72,5 +85,10 @@ const styles = StyleSheet.create({
         position: "absolute",
         right: 10,
         top: 13,
+    },
+    searchIcon: {
+        position: "absolute",
+        right: 10,
+        top: 13,  
     },
 });
