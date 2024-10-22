@@ -6,6 +6,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useState } from "react";
 import data from '../../fakedata.json';
 import formatCurrency from "../utils/format.currency";
+import ChartPie from "../components/chart.pie.component";
 
 const { width } = Dimensions.get('window');
 
@@ -13,15 +14,12 @@ export default function Home() {
     let [refreshing, setRefreshing] = useState(false);
     let [dados, setDados] = useState(data);
 
-
     const onRefresh = () => {
         setRefreshing(true);
         setTimeout(() => {
             setRefreshing(false);
         }, 2000);
     }
-
-
 
     return (
         <ScrollView style={styles.container}
@@ -77,9 +75,14 @@ export default function Home() {
                 </View>
             </View>
             <View style={styles.corpo}>
-                <View style={styles.corpoText}>
-                    <Text>Gráfico detalhado</Text>
-                    <Text>Úlitmos 7 dias</Text>
+                <View >
+                    <View style={styles.corpoText}>
+                        <Text style={styles.grafTitulo}>Gráfico detalhado</Text>
+                        <Text>Úlitmos 7 dias</Text>
+                    </View>
+                    <View>
+                        <ChartPie />
+                    </View>
                 </View>
             </View>
         </ScrollView>
@@ -174,4 +177,8 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         padding: 10,
     },
+    grafTitulo: {
+        fontSize: RFValue(16),
+        fontWeight: 'bold',
+    }
 });
