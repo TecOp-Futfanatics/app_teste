@@ -1,14 +1,39 @@
-import { View, Text, StyleSheet, ScrollView, Dimensions, RefreshControl } from "react-native";
+import { View, Text, StyleSheet, ScrollView, Dimensions, RefreshControl, FlatList } from "react-native";
 import Avatar from "../components/avatar.component";
 import Colors from "../constants/colors.constant";
 import { RFValue } from "react-native-responsive-fontsize";
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { useState } from "react";
+import React, { useState } from "react";
 import data from '../../fakedata.json';
 import formatCurrency from "../utils/format.currency";
 import ChartPie from "../components/chart.pie.component";
+import { router } from "expo-router";
+
 
 const { width } = Dimensions.get('window');
+
+
+interface ItemProps {
+    title: string;
+    date: string;
+    valor: number;
+}
+
+const Item = ({ title, date, valor }: ItemProps) => (
+    <View style={styles.item}>
+        <View>
+            <Text style={styles.title}>{title}</Text>
+            <Text style={styles.textDate}>
+                {
+                    new Date(date).toLocaleDateString()
+                }
+                </Text>
+        </View>
+        <View>
+            <Text style={styles.title}>{formatCurrency(valor)}</Text>
+        </View>
+    </View>
+);
 
 export default function Home() {
     let [refreshing, setRefreshing] = useState(false);
@@ -33,7 +58,7 @@ export default function Home() {
             <View style={styles.header}>
                 <View style={styles.headerConteudo}>
                     <Text style={styles.inicioText}>Inicio</Text>
-                    <Avatar name="Rodrigo Froes" size={40} />
+                    <Avatar name="Rodrigo Froes" size={40} onPress={() => {}} />
                 </View>
                 <View style={styles.headerValor}>
                     <View style={styles.totalContainer}>
@@ -83,6 +108,23 @@ export default function Home() {
                     <View>
                         <ChartPie />
                     </View>
+                </View>
+            </View>
+            <View style={styles.corpo}>
+                <View style={styles.corpoText}>
+                    <Text style={styles.grafTitulo}>Últimos lançamentos</Text>
+                </View>
+                <View>
+                    <FlatList
+                        data={dados.lista}
+                        renderItem={({ item }) => <Item
+                            title={item.descricao.toString()}
+                            date={item.data.toString()}
+                            valor={item.valor}
+                        />
+                        }
+                        keyExtractor={item => item.id.toString()}
+                    />
                 </View>
             </View>
         </ScrollView>
@@ -171,6 +213,7 @@ const styles = StyleSheet.create({
         flex: 2,
         backgroundColor: Colors.offWhite,
         paddingHorizontal: 5,
+        paddingVertical: 10,
     },
     corpoText: {
         flexDirection: 'row',
@@ -180,5 +223,22 @@ const styles = StyleSheet.create({
     grafTitulo: {
         fontSize: RFValue(16),
         fontWeight: 'bold',
-    }
+    },
+    item: {
+        backgroundColor: Colors.grayList,
+        padding: 15,
+        marginVertical: 5,
+        marginHorizontal: 15,
+        borderRadius: 5,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    title: {
+        fontSize: RFValue(16),
+        fontWeight: 'bold',
+    },
+    textDate: {
+        fontSize: RFValue(12),
+    },
 });
