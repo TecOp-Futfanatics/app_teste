@@ -94,6 +94,7 @@ const styles = StyleSheet.create({
         flexWrap: 'wrap',
         justifyContent: 'center',
         flexDirection: 'row',
+        gap: 5
     },
     container: {
         alignItems: 'center',
