@@ -1,6 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
 import { TouchableOpacity, StyleSheet } from "react-native";
-import { Colors } from "react-native/Libraries/NewAppScreen";
 
 interface ButtonIconProps {
     icon: string;
@@ -8,11 +7,12 @@ interface ButtonIconProps {
     color?: string;
     size?: number;
     colorButton?: string;
+    circle?: boolean;
 }
 
-export default function ButtonIcon({ icon, onPress, color, size, colorButton }: ButtonIconProps) {
+export default function ButtonIcon({ icon, onPress, color, size, colorButton, circle }: ButtonIconProps) {
     return (
-        <TouchableOpacity  style={styles.button && {backgroundColor: colorButton ? colorButton : 'trasnparent' }} onPress={onPress}>
+        <TouchableOpacity  style={styles.button && {backgroundColor: colorButton ? colorButton : 'trasnparent'}} onPress={onPress}>
             <Ionicons name={icon} size={size ? size : 24} color={color} />
         </TouchableOpacity>
     );
